@@ -1,2 +1,19 @@
 ---
-# TODO: implement the Ansible apply playbook for Part 3.
+# Part 3: ทำให้ Loopback บน router ตรงกับ desired state ด้วย cisco.ios.ios_config
+#
+# ตัวแปรที่ app/backends/ansible.py ส่งมาทาง --extra-vars:
+#   router, interface_name, description, ipv4_address, netmask, shutdown (true/false)
+- name: Apply Loopback interface desired state
+  hosts: routers
+  gather_facts: false
+
+  tasks:
+    - name: Configure the Loopback interface
+      cisco.ios.ios_config:
+        parents: "interface {{ interface_name }}"
+        lines:
+          - "description {{ description }}"
+          - "ip address {{ ipv4_address }} {{ netmask }}"
+          - "{{ 'shutdown' if shutdown | bool else 'no shutdown' }}"
+        # เทียบกับค่า default ของ IOS ด้วย เพื่อให้ `no shutdown` ไม่ถูกมองว่า changed ทุกครั้ง
+        defaults: true

@@ -1,0 +1,7 @@
+desired:
+  name: Loopback67070193
+  ipv4: 10.67.7.1/32
+  description: IPA2026-67070193
+  admin_state: down
+
+current: null

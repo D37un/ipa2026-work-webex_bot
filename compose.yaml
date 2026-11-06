@@ -22,3 +22,12 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+
+  # Cloudflare Quick Tunnel: ให้ Webex เรียกเข้ามาที่ webhook ผ่าน HTTPS ได้ (ไม่ต้องมีบัญชี/โดเมน)
+  # ดู URL ที่ได้ด้วย: docker compose logs tunnel  (ได้ URL ใหม่ทุกครั้งที่ restart)
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate --url http://webhook:8000
+    depends_on:
+      - webhook
+    restart: unless-stopped
